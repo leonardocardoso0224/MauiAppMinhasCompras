@@ -6,4 +6,18 @@ public partial class ListaProduto : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private void Toobaritem_clicked(object sender, EventArgs e)
+	{
+		try
+		{
+			Navigation.PushAsync(new views.NovoProduto());
+		}catch (Exception ex)
+		{
+			DisplayAlert("Ops", ex.Message, "OK");
+		}
+	}
+
+
+
 }
