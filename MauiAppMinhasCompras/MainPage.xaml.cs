@@ -1,24 +1,42 @@
-﻿namespace MauiAppMinhasCompras
+﻿using System.Collections.ObjectModel;
+
+namespace MauiAppMinhasCompras;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public ObservableCollection<Produto> Produtos { get; set; }
+    public ObservableCollection<Produto> ProdutosFiltrados { get; set; }
+
+    public MainPage()
     {
-        int count = 0;
+        InitializeComponent();
 
-        public MainPage()
+        Produtos = new ObservableCollection<Produto>
         {
-            InitializeComponent();
-        }
+            new Produto { Nome = "Placa de Vídeo RX 7600" },
+            new Produto { Nome = "Cabo de Rede Cat6 30m" },
+            new Produto { Nome = "Goniômetro de Precisão" },
+            new Produto { Nome = "Monitor Gamer 144hz" }
+        };
 
-        private void OnCounterClicked(object? sender, EventArgs e)
+        ProdutosFiltrados = new ObservableCollection<Produto>(Produtos);
+        BindingContext = this;
+    }
+
+    private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
+    {
+        var termoBusca = e.NewTextValue?.ToLower() ?? string.Empty;
+
+        ProdutosFiltrados.Clear();
+
+        foreach (var produto in Produtos.Where(p => p.Nome.ToLower().Contains(termoBusca)))
         {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            ProdutosFiltrados.Add(produto);
         }
     }
+}
+
+public class Produto
+{
+    public string Nome { get; set; }
 }
